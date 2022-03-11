@@ -2,9 +2,7 @@ package controller;
 
 import model.Product;
 import model.console.ConsoleFactory;
-import model.console.NintendoSwitch;
-import model.console.PlayStation;
-import model.console.Xbox;
+
 
 import java.util.Scanner;
 
@@ -95,19 +93,19 @@ public class CheckValidate {
         }
         return check;
     }
-    public String checkColor(){
-        Scanner scanner = new Scanner(System.in);
-        String check;
-        System.out.println("Enter products' color");
-        while (true){
-            check = scanner.nextLine();
-            if (check.equals(""))
-                System.err.println("Please don't leave this field empty. ");
-            else
-                break;
-        }
-        return check;
-    }
+//    public String checkColor(){
+//        Scanner scanner = new Scanner(System.in);
+//        String check;
+//        System.out.println("Enter products' color");
+//        while (true){
+//            check = scanner.nextLine();
+//            if (check.equals(""))
+//                System.err.println("Please don't leave this field empty. ");
+//            else
+//                break;
+//        }
+//        return check;
+//    }
     public Product checkProductType(){
         Scanner scanner = new Scanner(System.in);
         ConsoleFactory consoleFactory = new ConsoleFactory();
@@ -191,6 +189,23 @@ public class CheckValidate {
                 System.err.println("Please enter the right condition of the product: ");
         }
         return check;
+    }
+    public double checkPrinciple(){
+        Scanner scanner = new Scanner(System.in);
+        double principle;
+        System.out.println("Enter principle value: ");
+        while (true) {
+            try {
+                principle = Double.parseDouble(scanner.nextLine());
+                if (principle < 0)
+                    System.err.println("Principle can not be a negative number");
+                else
+                    break;
+            }catch (Exception exception){
+                System.err.println("Principle must be a number");
+            }
+        }
+        return principle;
     }
 
 }

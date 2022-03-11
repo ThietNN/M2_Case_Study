@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class ProductManagerProxy implements BST{
     private final ProductManager productManager;
-    private final double principle = 100000000;
+    private double principle;
     public static ProductFile productFile = new ProductFile();
     public ArrayList<Product> productList = productFile.readFile();
 
@@ -16,63 +16,63 @@ public class ProductManagerProxy implements BST{
     }
 
     @Override
-    public void showMenu() {
-
-    }
-
-    @Override
     public void getInfo() {
-
+        if (productList.isEmpty()){
+            throw new RuntimeException("No product found in file");
+        }
+        productManager.getInfo();
     }
 
     @Override
     public double getPrinciple() {
-        return 0;
+        if (principle < 0){
+            throw new RuntimeException("Principle is a negative number atm. Please check asap");
+        }
+        return productManager.getPrinciple();
     }
 
     @Override
-    public void setPrinciple(int principle) {
+    public void setPrinciple() {
+        productManager.setPrinciple();
 
+    }
+    public void setPrinciple(int principle){
+        this.principle = principle;
+    }
+
+    @Override
+    public Product search() {
+        return productManager.search();
     }
 
     @Override
     public void addProduct(Product product) {
+        productManager.addProduct(product);
+    }
 
+
+
+    @Override
+    public void sell() {
+        productManager.sell();
     }
 
     @Override
-    public Product getProductByID(int id) {
-        return null;
+    public void buy() {
+        productManager.buy();
     }
 
     @Override
-    public void sell(int id, int quantity) {
-
-    }
-
-    @Override
-    public void buy(int id, int quantity) {
-
-    }
-
-    @Override
-    public void trade(int idTake, int quantityTake, int idGive, int quantityGive) {
-
+    public void trade() {
+        productManager.trade();
     }
 
     @Override
     public Product createNewProduct() {
-        return null;
+        return productManager.createNewProduct();
     }
 
-    @Override
-    public boolean checkExistence(Product product) {
-        return false;
-    }
 
-    @Override
-    public void checkDuplicate(Product product) {
 
-    }
 
 }
