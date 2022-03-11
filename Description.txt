@@ -1,0 +1,63 @@
+// Lấy thông tin
+getInfo() : Trả về toàn bộ sản phẩm hiện có (toString)
+getPrinciple() : Trả về tiền vốn hiện có (Mặc định lúc đầu = 100000000
+setPrinciple() : Đặt lại tiền vốn
+
+// Tìm kiếm, thêm sản phẩm
+addProduct(): Thêm sản phẩm vào file
+getProductByID() : Trả về sản phẩm theo input ID, sử dụng trong code
+search() : Trả vè sản phẩm theo input ID ( có check ID nhập vào), sử dụng cho Client
+getID(): Check ID nhập vào
+getQuantity(): Check số lượng nhập vào
+
+// Bán: 
+getSellPrice(): Lấy số tiền cần để bán
+sellable(): Trả về true nếu còn đủ tiền vốn để mua hàng
+sell(): Bán theo ID
+- Nếu ID tồn tại: 
++ Check sellable()
++ Giảm số lượng sản phẩm trong kho
++ Tăng tiền vốn
+- Nếu ID không tồn tại
++ báo lỗi
+
+// Mua: 
+getBuyPrice: lấy số tiền cần để mua
+buyable(): Trả về true nếu còn đủ số lượng để bán
+sell(): Bán theo ID
+- Nếu ID tồn tại:
+	+ Check buyable
+	+ Tăng số lượng sản phẩm trong kho
+	+ Giảm tiền vốn
+- Nếu ID không tồn tại
+	+ Tạo sản phẩm mới
+	+ Check buyable
+	+ Tăng số lượng sản phẩm trong kho
+	+ Giảm tiền vốn
+
+//Trao đổi:
+trade(): input ID sản phẩm give, số lượng give
+- Lấy sản phẩm give 
+- Lấy Id take nhập vào
+	+ Check xem sản phẩm take đã tồn tại chưa
+		Nếu chưa, tạo mới
+- Lấy số lượng take
+- Kiểm tra chênh lệch khi trao đổi
+	+ Nếu đủ, tiến hành trao đổi:
+		Nếu sản phẩm take tồn tại -> tăng số lượng
+		Nếu sản phẩm take không tồn tại, thêm sản phẩm mới vào file
+		Giảm sản phẩm trong kho
+
+//Đặt thông tin
+setQuantity()
+setPrice()
+setRest()
+
+//Tạo mới
+createNewProDuct(): Tạo sản phẩm mới
+- Nếu đã có sản phẩm, báo cho người dùng
+- Nếu chưa, tiến hành tạo mới
+
+//Check
+checkExistence(): Kiểm tra xem sản phẩm đã tồn tại chưa
+adđDuplicate(): Nếu sản phẩm đã tồn tại, tìm sản phẩm và tăng thêm số lượng cho sản phẩm đó
