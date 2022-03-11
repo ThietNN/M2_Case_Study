@@ -57,13 +57,12 @@ public class ProductManager {
 
     public static Product getProductByID(int id) {
         productList = productFile.readFile();
-        Product product = null;
-        for (Product eachProduct : productList) {
-            if (eachProduct.getId() == id) {
-                product = eachProduct;
+        for (Product product : productList) {
+            if (product.getId() == id) {
+                return product;
             }
         }
-        return product;
+        return null;
     }
 
     public static Product search(){
@@ -95,12 +94,11 @@ public class ProductManager {
     public static void sellProduct(Product product, int quantity){
         double sellPrice = getSellPrice(product, quantity);
         principle = principle + sellPrice;
-        quantity = product.getQuantity() - quantity;
-        product.setQuantity(quantity);
+        int newQuantity = product.getQuantity() - quantity;
+        product.setQuantity(newQuantity);
     }
 
     public static void sell() {
-        productList = productFile.readFile();
         CheckValidate checkValidate = new CheckValidate();
         int id = checkValidate.checkID();
         Product product = getProductByID(id);
@@ -124,29 +122,42 @@ public class ProductManager {
             return false;
     }
 
-    public static void buyProduct(Product product, int quantity){
+    public static void buyNewProduct(Product product, int quantity){
         double buyPrice = getBuyPrice(product, quantity);
         principle = principle - buyPrice;
         product.setQuantity(quantity);
     }
+    public static void buyExistProduct(Product product, int quantity){
+        double buyPrice = getBuyPrice(product,quantity);
+        principle = principle - buyPrice;
+        quantity = product.getQuantity() + quantity;
+        product.setQuantity(quantity);
+    }
 
+    public static void buyProduct(boolean exist, Product product, int quantity){
+        if (exist)
+            buyExistProduct(product,quantity);
+        else
+            buyNewProduct(product,quantity);
+    }
 
     public static void buy() {
         productList = productFile.readFile();
         CheckValidate checkValidate = new CheckValidate();
+        boolean exist;
         int id = checkValidate.checkID();
         Product product = getProductByID(id);
         int quantity = checkValidate.checkQuantity();
         if (product != null){
+            exist = true;
             System.out.println("Product with this ID is already exist. Proceed to add quantity. ");
-            if (buyable(product, quantity)) {
-                quantity = product.getQuantity() + quantity;
-            }else {
+            if (!buyable(product, quantity)) {
                 System.err.println("Not enough fund to buy");
                 return;
             }
         }
         else {
+            exist = false;
             product = checkValidate.checkProductType();
             product.setId(id);
             setPrice(product);
@@ -158,36 +169,81 @@ public class ProductManager {
                 return;
             }
         }
-        buyProduct(product,quantity);
+        buyProduct(exist,product,quantity);
         System.out.println("Transaction completed");
         ProductFile.writeFile(productList);
     }
-// try singleton
+    public static boolean principleCheck(Product buyProduct, int buyQuantity, Product sellProduct, int sellQuantity){
+        double difference = getBuyPrice(buyProduct, buyQuantity) - getSellPrice(sellProduct, sellQuantity);
+        double principleCheck = principle - difference;
+        return principleCheck < 0;
+    }
+    public static void tradeProduct(Product sellProduct, int sellQuantity, boolean buyProductExist, Product buyProduct, int buyQuantity){
+        double sellPrice = getSellPrice(sellProduct, sellQuantity);
+        principle = principle + sellPrice;
+        int newSellQuantity = sellProduct.getQuantity() - sellQuantity;
+        sellProduct.setQuantity(newSellQuantity);
+
+        //mua
+        if (buyProductExist)
+            buyExistProduct(buyProduct,buyQuantity);
+        else
+            buyNewProduct(buyProduct,buyQuantity);
+    }
     public static void trade(){
+        productList = productFile.readFile();
         CheckValidate checkValidate = new CheckValidate();
-        boolean check = false;
+        boolean buyProductExist;
         System.out.println("Product give: ");
         int sellID = checkValidate.checkID();
         Product sellProduct = getProductByID(sellID);
-        if (sellProduct != null){
-            int sellQuantity = checkValidate.checkQuantity();
-            check = true;
-        }else{
+        if (sellProduct == null){
             System.err.println("Product not found");
             return;
         }
+        int sellQuantity = checkValidate.checkQuantity();
+        if (!sellable(sellProduct,sellQuantity)){
+            System.err.println("Not enough product to trade");
+            return;
+        }
+
         System.out.println("Product take: ");
         int buyID = checkValidate.checkID();
-        Product buyProduct = getProductByID(buyID);
+        Product buyProduct;
+        if (sellID == buyID){
+            buyProduct = sellProduct;
+        }else
+            buyProduct = getProductByID(buyID);
         if (buyProduct == null){
             buyProduct = checkValidate.checkProductType();
             buyProduct.setId(buyID);
             setPrice(buyProduct);
+            buyProductExist = false;
+        }else{
+            buyProductExist = true;
         }
         int buyQuantity = checkValidate.checkQuantity();
-        double difference = getBuyPrice(buyProduct,buyQuantity) +
+        boolean principleCheck = principleCheck(buyProduct,buyQuantity,sellProduct,sellQuantity);
+        if (principleCheck) {
+            System.err.println("Not enough fund to trade. ");
+        }
 
+        if (!buyProductExist){
+            setRest(buyProduct);
+            addProduct(buyProduct);
+        }
+        System.out.println(sellProduct);
+        System.out.println(buyProduct);
+
+        tradeProduct(sellProduct,sellQuantity,buyProductExist,buyProduct,buyQuantity);
+
+        System.out.println(sellProduct);
+        System.out.println(buyProduct);
+
+        System.out.println("Transaction completed");
+        ProductFile.writeFile(productList);
     }
+
 
     public static Product setQuantity(Product product){
         CheckValidate checkValidate = new CheckValidate();
@@ -196,14 +252,13 @@ public class ProductManager {
         return product;
     }
 
-    public static Product setPrice(Product product){
+    public static void setPrice(Product product){
         CheckValidate checkValidate = new CheckValidate();
         double price = checkValidate.checkPrice();
         product.setPrice(price);
-        return product;
     }
 
-    public static Product setRest(Product product){
+    public static void setRest(Product product){
         CheckValidate checkValidate = new CheckValidate();
         String name = checkValidate.checkName();
         product.setName(name);
@@ -221,7 +276,6 @@ public class ProductManager {
             boolean lite = checkValidate.checkLite();
             ((NintendoSwitch) product).setLite(lite);
         }
-        return product;
     }
 
     public static Product createNewProduct() {
@@ -255,15 +309,5 @@ public class ProductManager {
         return exist;
     }
 
-    public static void addDuplicate(Product product) {
-        productList = productFile.readFile();
-        for (Product eachProduct : productList) {
-            if ((eachProduct.getId()) == (product.getId())) {
-                int newQuantity = eachProduct.getQuantity() + product.getQuantity();
-                eachProduct.setQuantity(newQuantity);
-                ProductFile.writeFile(productList);
-                break;
-            }
-        }
-    }
+
 }

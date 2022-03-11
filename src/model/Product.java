@@ -55,7 +55,7 @@ public abstract class Product implements Comparable<Product>, Serializable {
 
     public double getSellPrice(){
         if (condition)
-            return price + (price * 20 / 100);
+            return price * 120 / 100;
         else
             return price * 90 / 100;
     }

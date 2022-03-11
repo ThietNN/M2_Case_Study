@@ -3,6 +3,7 @@ package Client;
 
 import model.Product;
 import model.console.PlayStation;
+import model.console.Xbox;
 import storage.ProductFile;
 
 import java.util.ArrayList;
@@ -14,8 +15,10 @@ import static controller.ProductManager.*;
 public class Client {
     public static void main(String[] args) {
         ArrayList<Product> productList = new ArrayList<>();
-        PlayStation example = new PlayStation(1,"PS",25,12000,true,4,"Persona 5");
-        productList.add(example);
+        PlayStation playStation1 = new PlayStation(1,"PS",25,12000,true,4,"Persona 5");
+        Xbox xbox1 = new Xbox(2,"Xbox",12,25000,false,"One");
+        productList.add(playStation1);
+        productList.add(xbox1);
         ProductFile.writeFile(productList);
 
         showMenu();
