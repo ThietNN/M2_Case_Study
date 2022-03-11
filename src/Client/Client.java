@@ -31,42 +31,30 @@ public class Client {
         int choice;
         do{
             choice = scanner.nextInt();
-            switch (choice){
-                case 1:
-                    showMenu();
-                    break;
-                case 2:
-                    productManagerProxy.getInfo();
-                    break;
-                case 3:
+            switch (choice) {
+                case 1 -> showMenu();
+                case 2 -> productManagerProxy.getInfo();
+                case 3 -> {
                     double result = productManagerProxy.getPrinciple();
                     System.out.println("Principle = " + result);
-                    break;
-                case 4:
-                    productManagerProxy.setPrinciple();
-                    break;
-                case 5:
+                }
+                case 4 -> productManagerProxy.setPrinciple();
+                case 5 -> {
                     Product newProduct = productManagerProxy.createNewProduct();
                     productManagerProxy.addProduct(newProduct);
-                    break;
-                case 6:
+                }
+                case 6 -> {
                     Product searchProduct = productManagerProxy.search();
                     System.out.println(searchProduct);
-                    break;
-                case 7:
-                    productManagerProxy.sell();
-                    break;
-                case 8:
-                    productManagerProxy.buy();
-                    break;
-                case 9:
-                    productManagerProxy.trade();
-                    break;
-                case 10:
+                }
+                case 7 -> productManagerProxy.sell();
+                case 8 -> productManagerProxy.buy();
+                case 9 -> productManagerProxy.trade();
+                case 10 -> {
                     System.out.println("Sort by ID: ");
                     Collections.sort(productList);
                     productManagerProxy.getInfo();
-                    break;
+                }
             }
         }while (choice != 0);
     }

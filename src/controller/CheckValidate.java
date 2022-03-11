@@ -93,19 +93,6 @@ public class CheckValidate {
         }
         return check;
     }
-//    public String checkColor(){
-//        Scanner scanner = new Scanner(System.in);
-//        String check;
-//        System.out.println("Enter products' color");
-//        while (true){
-//            check = scanner.nextLine();
-//            if (check.equals(""))
-//                System.err.println("Please don't leave this field empty. ");
-//            else
-//                break;
-//        }
-//        return check;
-//    }
     public Product checkProductType(){
         Scanner scanner = new Scanner(System.in);
         ConsoleFactory consoleFactory = new ConsoleFactory();
