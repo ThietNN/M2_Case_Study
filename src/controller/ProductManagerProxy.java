@@ -1,6 +1,6 @@
 package controller;
 
-import model.Product;
+import model.Console;
 import storage.ProductFile;
 
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ public class ProductManagerProxy implements BST{
     private final ProductManager productManager;
     private double principle;
     public static ProductFile productFile = new ProductFile();
-    public ArrayList<Product> productList = productFile.readFile();
+    public ArrayList<Console> consoleList = productFile.readFile();
 
     public ProductManagerProxy() {
         this.productManager = new ProductManager();
@@ -17,7 +17,7 @@ public class ProductManagerProxy implements BST{
 
     @Override
     public void getInfo() {
-        if (productList.isEmpty()){
+        if (consoleList.isEmpty()){
             throw new RuntimeException("No product found in file");
         }
         productManager.getInfo();
@@ -34,6 +34,10 @@ public class ProductManagerProxy implements BST{
     @Override
     public void setPrinciple() {
         productManager.setPrinciple();
+        if (principle > Double.MAX_VALUE){
+            principle = 0;
+            throw new RuntimeException("Principle exceed max value. Principle set to 0");
+        }
 
     }
     public void setPrinciple(int principle){
@@ -41,13 +45,13 @@ public class ProductManagerProxy implements BST{
     }
 
     @Override
-    public Product search() {
+    public Console search() {
         return productManager.search();
     }
 
     @Override
-    public void addProduct(Product product) {
-        productManager.addProduct(product);
+    public void addProduct(Console console) {
+        productManager.addProduct(console);
     }
 
 
@@ -68,7 +72,7 @@ public class ProductManagerProxy implements BST{
     }
 
     @Override
-    public Product createNewProduct() {
+    public Console createNewProduct() {
         return productManager.createNewProduct();
     }
 

@@ -1,6 +1,6 @@
 package controller;
 
-import model.Product;
+import model.Console;
 
 public interface BST {
 
@@ -10,12 +10,12 @@ public interface BST {
     void setPrinciple();
     void setPrinciple(int principle);
 
-    Product search();
-    void addProduct(Product product);
+    Console search();
+    void addProduct(Console console);
 
     void sell();
     void buy();
     void trade();
-    Product createNewProduct();
+    Console createNewProduct();
 
 }

@@ -1,8 +1,8 @@
 package model.console;
 
-import model.Product;
+import model.Console;
 
-public class PlayStation extends Product {
+public class PlayStation extends Console {
     private int generation;
     private String edition;
 

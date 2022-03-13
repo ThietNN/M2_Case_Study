@@ -2,7 +2,7 @@ package model;
 
 import java.io.Serializable;
 
-public abstract class Product implements Comparable<Product>, Serializable {
+public abstract class Console implements Comparable<Console>, Serializable {
     private int id;
     private String name;
     private int quantity;
@@ -10,10 +10,10 @@ public abstract class Product implements Comparable<Product>, Serializable {
     private boolean condition;
 
 
-    public Product() {
+    public Console() {
     }
 
-    public Product(int id, String name, int quantity, double price, boolean condition) {
+    public Console(int id, String name, int quantity, double price, boolean condition) {
         this.id = id;
         this.name = name;
         this.quantity = quantity;
@@ -76,8 +76,8 @@ public abstract class Product implements Comparable<Product>, Serializable {
     }
 
     @Override
-    public int compareTo(Product product){
-        return Integer.compare(getId(),product.getId());
+    public int compareTo(Console console){
+        return Integer.compare(getId(), console.getId());
     }
 
 }

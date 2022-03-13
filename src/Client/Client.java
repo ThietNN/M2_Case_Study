@@ -2,7 +2,7 @@ package Client;
 
 
 import controller.ProductManagerProxy;
-import model.Product;
+import model.Console;
 import model.console.PlayStation;
 import model.console.Xbox;
 import storage.ProductFile;
@@ -16,14 +16,14 @@ import static controller.ProductManager.*;
 public class Client {
     public static void main(String[] args) {
         ProductManagerProxy productManagerProxy = new ProductManagerProxy();
-        ArrayList<Product> productList = new ArrayList<>();
+        ArrayList<Console> consoleList = new ArrayList<>();
 
         productManagerProxy.setPrinciple(100000);
         PlayStation playStation1 = new PlayStation(1,"PS",25,12000,true,4,"Persona 5");
         Xbox xbox1 = new Xbox(2,"Xbox",12,25000,false,"One");
-        productList.add(playStation1);
-        productList.add(xbox1);
-        ProductFile.writeFile(productList);
+        consoleList.add(playStation1);
+        consoleList.add(xbox1);
+        ProductFile.writeFile(consoleList);
 
         showMenu();
 
@@ -40,19 +40,19 @@ public class Client {
                 }
                 case 4 -> productManagerProxy.setPrinciple();
                 case 5 -> {
-                    Product newProduct = productManagerProxy.createNewProduct();
-                    productManagerProxy.addProduct(newProduct);
+                    Console newConsole = productManagerProxy.createNewProduct();
+                    productManagerProxy.addProduct(newConsole);
                 }
                 case 6 -> {
-                    Product searchProduct = productManagerProxy.search();
-                    System.out.println(searchProduct);
+                    Console searchConsole = productManagerProxy.search();
+                    System.out.println(searchConsole);
                 }
                 case 7 -> productManagerProxy.sell();
                 case 8 -> productManagerProxy.buy();
                 case 9 -> productManagerProxy.trade();
                 case 10 -> {
                     System.out.println("Sort by ID: ");
-                    Collections.sort(productList);
+                    Collections.sort(consoleList);
                     productManagerProxy.getInfo();
                 }
             }

@@ -1,6 +1,6 @@
 package controller;
 
-import model.Product;
+import model.Console;
 import model.console.ConsoleFactory;
 
 
@@ -93,16 +93,16 @@ public class CheckValidate {
         }
         return check;
     }
-    public Product checkProductType(){
+    public Console checkProductType(){
         Scanner scanner = new Scanner(System.in);
         ConsoleFactory consoleFactory = new ConsoleFactory();
-        Product product;
+        Console console;
         String type;
         System.out.println("Type 'ps' for PlayStation, 'xbox' for Xbox, 'ns' for NintendoSwitch");
 
         type = scanner.nextLine();
-        product = consoleFactory.getConsole(type);
-        return product;
+        console = consoleFactory.getConsole(type);
+        return console;
     }
     public int checkGeneration(){
         Scanner scanner = new Scanner(System.in);

@@ -1,12 +1,12 @@
 package controller;
 
-import model.Product;
+import model.Console;
 
 import java.util.Comparator;
 
-public class IDComparator implements Comparator<Product> {
+public class IDComparator implements Comparator<Console> {
     @Override
-    public int compare (Product product1, Product product2){
-        return Integer.compare(product1.getId(), product2.getId());
+    public int compare (Console console1, Console console2){
+        return Integer.compare(console1.getId(), console2.getId());
     }
 }

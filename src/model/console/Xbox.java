@@ -1,8 +1,8 @@
 package model.console;
 
-import model.Product;
+import model.Console;
 
-public class Xbox extends Product {
+public class Xbox extends Console {
     private String type;
 
     public Xbox() {

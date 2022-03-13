@@ -1,8 +1,8 @@
 package model.console;
 
-import model.Product;
+import model.Console;
 
-public class NintendoSwitch extends Product {
+public class NintendoSwitch extends Console {
     private boolean lite;
 
     public NintendoSwitch() {

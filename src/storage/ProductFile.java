@@ -1,32 +1,32 @@
 package storage;
 
-import model.Product;
+import model.Console;
 
 import java.io.*;
 import java.util.ArrayList;
 
 public class ProductFile {
-    public ArrayList<Product> readFile(){
+    public ArrayList<Console> readFile(){
         File file = new File("product.thiet");
         try{
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
             Object result = ois.readObject();
-            ArrayList<Product> productList = (ArrayList<Product>) result;
+            ArrayList<Console> consoleList = (ArrayList<Console>) result;
             ois.close();
             fis.close();
-            return productList;
+            return consoleList;
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return new ArrayList<>();
     }
 
-    public static void writeFile(ArrayList<Product> productList){
+    public static void writeFile(ArrayList<Console> consoleList){
         try{
             FileOutputStream fos = new FileOutputStream("product.thiet");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(productList);
+            oos.writeObject(consoleList);
             oos.close();
             fos.close();
         } catch (IOException e) {

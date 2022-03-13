@@ -1,10 +1,10 @@
 package model.console;
 
-import model.Product;
+import model.Console;
 
 
 public class ConsoleFactory {
-    public Product getConsole(String type){
+    public Console getConsole(String type){
 
         if (type.equals("ps")){
             return new PlayStation();

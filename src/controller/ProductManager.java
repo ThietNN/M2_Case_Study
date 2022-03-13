@@ -1,6 +1,6 @@
 package controller;
 
-import model.Product;
+import model.Console;
 import model.console.NintendoSwitch;
 import model.console.PlayStation;
 import model.console.Xbox;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class ProductManager implements BST{
     private double principle;
     public ProductFile productFile = new ProductFile();
-    public ArrayList<Product> productList = productFile.readFile();
+    public ArrayList<Console> consoleList = productFile.readFile();
 
     public static void showMenu() {
         System.out.println("Menu: ");
@@ -30,10 +30,10 @@ public class ProductManager implements BST{
     }
 
     public  void getInfo() {
-        productList = productFile.readFile();
-        if (!productList.isEmpty()) {
-            for (Product product : productList) {
-                System.out.println(product);
+        consoleList = productFile.readFile();
+        if (!consoleList.isEmpty()) {
+            for (Console console : consoleList) {
+                System.out.println(console);
             }
         }
         else
@@ -52,19 +52,19 @@ public class ProductManager implements BST{
         this.principle = principle;
     }
 
-    public void addProduct(Product product) {
-        productList = productFile.readFile();
-        if (product != null) {
-            productList.add(product);
-            ProductFile.writeFile(productList);
+    public void addProduct(Console console) {
+        consoleList = productFile.readFile();
+        if (console != null) {
+            consoleList.add(console);
+            ProductFile.writeFile(consoleList);
         }
     }
 
     public int getPositionByID(int id){
-        productList = productFile.readFile();
+        consoleList = productFile.readFile();
         int result = -1;
-        for (int i = 0; i < productList.size(); i++){
-            if (productList.get(i).getId() == id){
+        for (int i = 0; i < consoleList.size(); i++){
+            if (consoleList.get(i).getId() == id){
                 result = i;
                 break;
             }
@@ -72,241 +72,241 @@ public class ProductManager implements BST{
         return result;
     }
 
-    public Product getProductByID(int id) {
-        productList = productFile.readFile();
-        for (Product product : productList) {
-            if (product.getId() == id) {
-                return product;
+    public Console getProductByID(int id) {
+        consoleList = productFile.readFile();
+        for (Console console : consoleList) {
+            if (console.getId() == id) {
+                return console;
             }
         }
         return null;
     }
 
-    public Product search(){
+    public Console search(){
         CheckValidate checkValidate = new CheckValidate();
         int searchID = checkValidate.checkID();
-        Product searchProduct = getProductByID(searchID);
-        if (searchProduct == null){
+        Console searchConsole = getProductByID(searchID);
+        if (searchConsole == null){
             System.err.println("Product with ID = " + searchID + " can not be found");
         }
-        return searchProduct;
+        return searchConsole;
     }
 
-    public double getBuyPrice(Product product, int quantity){
-        double price = product.getBuyPrice();
+    public double getBuyPrice(Console console, int quantity){
+        double price = console.getBuyPrice();
         return price * quantity;
     }
-    public double getSellPrice(Product product, int quantity){
-        double price = product.getSellPrice();
+    public double getSellPrice(Console console, int quantity){
+        double price = console.getSellPrice();
         return price * quantity;
     }
 
-    public boolean sellable(Product product, int quantity){
-        return product.getQuantity() >= quantity;
+    public boolean sellable(Console console, int quantity){
+        return console.getQuantity() >= quantity;
     }
 
-    public void sellProduct(Product product, int quantity){
-        double sellPrice = getSellPrice(product, quantity);
+    public void sellProduct(Console console, int quantity){
+        double sellPrice = getSellPrice(console, quantity);
         principle = principle + sellPrice;
-        int newQuantity = product.getQuantity() - quantity;
-        product.setQuantity(newQuantity);
+        int newQuantity = console.getQuantity() - quantity;
+        console.setQuantity(newQuantity);
     }
 
     public void sell() {
         CheckValidate checkValidate = new CheckValidate();
         int id = checkValidate.checkID();
-        Product product = getProductByID(id);
-        if (product != null) {
+        Console console = getProductByID(id);
+        if (console != null) {
             int quantity = checkValidate.checkQuantity();
-            if (sellable(product,quantity)) {
-                sellProduct(product,quantity);
+            if (sellable(console,quantity)) {
+                sellProduct(console,quantity);
                 System.out.println("Transaction completed");
             } else
                 System.err.println("Not much left to sell");
         }else
             System.err.println("Product not found");
-        ProductFile.writeFile(productList);
+        ProductFile.writeFile(consoleList);
     }
 
-    public boolean buyable(Product product, int quantity){
-        double buyPrice = getBuyPrice(product, quantity);
+    public boolean buyable(Console console, int quantity){
+        double buyPrice = getBuyPrice(console, quantity);
         return principle >= buyPrice;
     }
 
-    public void buyNewProduct(Product product, int quantity){
-        double buyPrice = getBuyPrice(product, quantity);
+    public void buyNewProduct(Console console, int quantity){
+        double buyPrice = getBuyPrice(console, quantity);
         principle = principle - buyPrice;
-        product.setQuantity(quantity);
+        console.setQuantity(quantity);
     }
-    public void buyExistProduct(Product product, int quantity){
-        double buyPrice = getBuyPrice(product,quantity);
+    public void buyExistProduct(Console console, int quantity){
+        double buyPrice = getBuyPrice(console,quantity);
         principle = principle - buyPrice;
-        quantity = product.getQuantity() + quantity;
-        product.setQuantity(quantity);
+        quantity = console.getQuantity() + quantity;
+        console.setQuantity(quantity);
     }
 
-    public void buyProduct(boolean exist, Product product, int quantity){
+    public void buyProduct(boolean exist, Console console, int quantity){
         if (exist)
-            buyExistProduct(product,quantity);
+            buyExistProduct(console,quantity);
         else
-            buyNewProduct(product,quantity);
+            buyNewProduct(console,quantity);
     }
 
     public void buy() {
-        productList = productFile.readFile();
+        consoleList = productFile.readFile();
         CheckValidate checkValidate = new CheckValidate();
         boolean exist;
         int id = checkValidate.checkID();
-        Product product = getProductByID(id);
+        Console console = getProductByID(id);
         int quantity = checkValidate.checkQuantity();
-        if (product != null){
+        if (console != null){
             exist = true;
             System.out.println("Product with this ID is already exist. Proceed to add quantity. ");
-            if (!buyable(product, quantity)) {
+            if (!buyable(console, quantity)) {
                 System.err.println("Not enough fund to buy");
                 return;
             }
         }
         else {
             exist = false;
-            product = checkValidate.checkProductType();
-            product.setId(id);
-            setPrice(product);
-            if (buyable(product, quantity)) {
-                setRest(product);
-                addProduct(product);
+            console = checkValidate.checkProductType();
+            console.setId(id);
+            setPrice(console);
+            if (buyable(console, quantity)) {
+                setRest(console);
+                addProduct(console);
             }else {
                 System.err.println("Not enough fund to buy");
                 return;
             }
         }
-        buyProduct(exist,product,quantity);
+        buyProduct(exist, console,quantity);
         System.out.println("Transaction completed");
-        ProductFile.writeFile(productList);
+        ProductFile.writeFile(consoleList);
     }
-    public boolean principleCheck(Product buyProduct, int buyQuantity, Product sellProduct, int sellQuantity){
-        double buyPrice = getBuyPrice(buyProduct, buyQuantity);
-        double sellPrice = getSellPrice(sellProduct, sellQuantity);
+    public boolean principleCheck(Console buyConsole, int buyQuantity, Console sellConsole, int sellQuantity){
+        double buyPrice = getBuyPrice(buyConsole, buyQuantity);
+        double sellPrice = getSellPrice(sellConsole, sellQuantity);
         double difference = buyPrice - sellPrice;
         double principleCheck = principle - difference;
         return principleCheck < 0;
     }
-    public void tradeProduct(Product sellProduct, int sellQuantity, boolean buyProductExist, Product buyProduct, int buyQuantity){
-        double sellPrice = getSellPrice(sellProduct, sellQuantity);
+    public void tradeProduct(Console sellConsole, int sellQuantity, boolean buyProductExist, Console buyConsole, int buyQuantity){
+        double sellPrice = getSellPrice(sellConsole, sellQuantity);
         principle = principle + sellPrice;
-        int newSellQuantity = sellProduct.getQuantity() - sellQuantity;
-        sellProduct.setQuantity(newSellQuantity);
+        int newSellQuantity = sellConsole.getQuantity() - sellQuantity;
+        sellConsole.setQuantity(newSellQuantity);
 
         if (buyProductExist)
-            buyExistProduct(buyProduct,buyQuantity);
+            buyExistProduct(buyConsole,buyQuantity);
         else
-            buyNewProduct(buyProduct,buyQuantity);
+            buyNewProduct(buyConsole,buyQuantity);
     }
     public void trade(){
-        productList = productFile.readFile();
+        consoleList = productFile.readFile();
         CheckValidate checkValidate = new CheckValidate();
         boolean buyProductExist;
         System.out.println("Product give: ");
         int sellID = checkValidate.checkID();
         int replaceSellID = getPositionByID(sellID);
-        Product sellProduct = getProductByID(sellID);
-        if (sellProduct == null){
+        Console sellConsole = getProductByID(sellID);
+        if (sellConsole == null){
             System.err.println("Product not found");
             return;
         }
         int sellQuantity = checkValidate.checkQuantity();
-        if (!sellable(sellProduct,sellQuantity)){
+        if (!sellable(sellConsole,sellQuantity)){
             System.err.println("Not enough product to trade");
             return;
         }
 
         System.out.println("Product take: ");
         int buyID = checkValidate.checkID();
-        Product buyProduct;
+        Console buyConsole;
         if (sellID == buyID){
-            buyProduct = sellProduct;
+            buyConsole = sellConsole;
         }else
-            buyProduct = getProductByID(buyID);
-        if (buyProduct == null){
-            buyProduct = checkValidate.checkProductType();
-            buyProduct.setId(buyID);
-            setPrice(buyProduct);
+            buyConsole = getProductByID(buyID);
+        if (buyConsole == null){
+            buyConsole = checkValidate.checkProductType();
+            buyConsole.setId(buyID);
+            setPrice(buyConsole);
             buyProductExist = false;
         }else{
             buyProductExist = true;
         }
         int buyQuantity = checkValidate.checkQuantity();
-        boolean principleCheck = principleCheck(buyProduct,buyQuantity,sellProduct,sellQuantity);
+        boolean principleCheck = principleCheck(buyConsole,buyQuantity, sellConsole,sellQuantity);
         if (principleCheck) {
             System.err.println("Not enough fund to trade. ");
         }
 
         if (!buyProductExist){
-            setRest(buyProduct);
-            addProduct(buyProduct);
+            setRest(buyConsole);
+            addProduct(buyConsole);
         }
-        tradeProduct(sellProduct,sellQuantity,buyProductExist,buyProduct,buyQuantity);
-        productList.set(replaceSellID,sellProduct);
+        tradeProduct(sellConsole,sellQuantity,buyProductExist, buyConsole,buyQuantity);
+        consoleList.set(replaceSellID, sellConsole);
         System.out.println("Transaction completed");
-        ProductFile.writeFile(productList);
+        ProductFile.writeFile(consoleList);
     }
 
 
-    public void setQuantity(Product product){
+    public void setQuantity(Console console){
         CheckValidate checkValidate = new CheckValidate();
         int quantity = checkValidate.checkQuantity();
-        product.setQuantity(quantity);
+        console.setQuantity(quantity);
     }
 
-    public void setPrice(Product product){
+    public void setPrice(Console console){
         CheckValidate checkValidate = new CheckValidate();
         double price = checkValidate.checkPrice();
-        product.setPrice(price);
+        console.setPrice(price);
     }
 
-    public void setRest(Product product){
+    public void setRest(Console console){
         CheckValidate checkValidate = new CheckValidate();
         String name = checkValidate.checkName();
-        product.setName(name);
+        console.setName(name);
         boolean condition = checkValidate.checkCondition();
-        product.setCondition(condition);
-        if (product instanceof PlayStation) {
+        console.setCondition(condition);
+        if (console instanceof PlayStation) {
             int generation = checkValidate.checkGeneration();
-            ((PlayStation) product).setGeneration(generation);
+            ((PlayStation) console).setGeneration(generation);
             String edition = checkValidate.checkEdition();
-            ((PlayStation) product).setEdition(edition);
-        } else if (product instanceof Xbox) {
+            ((PlayStation) console).setEdition(edition);
+        } else if (console instanceof Xbox) {
             String type = checkValidate.checkType();
-            ((Xbox) product).setType(type);
-        } else if (product instanceof NintendoSwitch) {
+            ((Xbox) console).setType(type);
+        } else if (console instanceof NintendoSwitch) {
             boolean lite = checkValidate.checkLite();
-            ((NintendoSwitch) product).setLite(lite);
+            ((NintendoSwitch) console).setLite(lite);
         }
     }
 
-    public Product createNewProduct() {
+    public Console createNewProduct() {
         CheckValidate checkValidate = new CheckValidate();
-        Product product = checkValidate.checkProductType();
+        Console console = checkValidate.checkProductType();
         int id = checkValidate.checkID();
-        product.setId(id);
-        if (checkExistence(product)){
+        console.setId(id);
+        if (checkExistence(console)){
             System.err.println("Product is already exist!");
             return null;
         }
         else {
-            setQuantity(product);
-            setPrice(product);
-            setRest(product);
+            setQuantity(console);
+            setPrice(console);
+            setRest(console);
             System.out.println("New product created successfully");
         }
-        return product;
+        return console;
     }
 
-    public boolean checkExistence(Product product){
-        productList = productFile.readFile();
+    public boolean checkExistence(Console console){
+        consoleList = productFile.readFile();
         boolean exist = false;
-        for (Product eachProduct : productList) {
-            if ((eachProduct.getId()) == (product.getId())) {
+        for (Console eachConsole : consoleList) {
+            if ((eachConsole.getId()) == (console.getId())) {
                 exist = true;
                 break;
             }
